@@ -1,0 +1,1113 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.6.36">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Carson Trego">
+<meta name="dcterms.date" content="2026-01-12">
+
+<title>Mental Health Analysis: 2023-2026</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="qmdReportSend_files/libs/clipboard/clipboard.min.js"></script>
+<script src="qmdReportSend_files/libs/quarto-html/quarto.js"></script>
+<script src="qmdReportSend_files/libs/quarto-html/popper.min.js"></script>
+<script src="qmdReportSend_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="qmdReportSend_files/libs/quarto-html/anchor.min.js"></script>
+<link href="qmdReportSend_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="qmdReportSend_files/libs/quarto-html/quarto-syntax-highlighting-01c78b5cd655e4cd89133cf59d535862.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="qmdReportSend_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="qmdReportSend_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="qmdReportSend_files/libs/bootstrap/bootstrap-b3555b3fc6f6a728ae0fc455f17079c9.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#description" id="toc-description" class="nav-link active" data-scroll-target="#description"><span class="header-section-number">1</span> DESCRIPTION</a></li>
+  <li><a href="#preparation" id="toc-preparation" class="nav-link" data-scroll-target="#preparation"><span class="header-section-number">2</span> PREPARATION</a></li>
+  <li><a href="#plotting-important" id="toc-plotting-important" class="nav-link" data-scroll-target="#plotting-important"><span class="header-section-number">3</span> PLOTTING (IMPORTANT)</a></li>
+  <li><a href="#raw-analysis" id="toc-raw-analysis" class="nav-link" data-scroll-target="#raw-analysis"><span class="header-section-number">4</span> RAW ANALYSIS</a></li>
+  <li><a href="#summary-important" id="toc-summary-important" class="nav-link" data-scroll-target="#summary-important"><span class="header-section-number">5</span> SUMMARY (IMPORTANT)</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Mental Health Analysis: 2023-2026</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Carson Trego </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">January 12, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="description" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="description"><span class="header-section-number">1</span> DESCRIPTION</h2>
+<p>Across the last three years, three surveys were taken using almost the exact same methodology. Dental school students were asked to take a set of mental health surveys, and 3 metrics were scored (PHQ9,BURNOUT MINI Z,GAD7) Ids were not taken, and given the size of the school, it is very likely that many of the participants are the same people, so a person may have taken the quiz as a first year in the first survey, a second year in the second survey, and a third year in the third survey, and we would not be able to tell.</p>
+</section>
+<section id="preparation" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="preparation"><span class="header-section-number">2</span> PREPARATION</h2>
+<p>We have separate files with separate schemes for how the data is recorded, and we need to modify the data to all be in the same format. This whole section is that process, but it contains no analysis or plotting. For information to put on the abstract, skip to the PLOTTING and ANALYSIS sections.</p>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "analysis_script.py"      "COLUMNS.txt"            
+ [3] "debug_means.py"          "doNotModifyJustRead"    
+ [5] "inspect_data.py"         "prompt.txt"             
+ [7] "qmdReport.pdf"           "qmdReport.qmd"          
+ [9] "qmdReportSend.qmd"       "qmdReportSend.rmarkdown"
+[11] "sensitivity_check.py"    "sensitivity_check_v2.py"</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 24
+  Timestamp `Email Address` What year in dental school are…¹
+      &lt;dbl&gt; &lt;lgl&gt;           &lt;chr&gt;                           
+1    45299. NA              D4                              
+2    45300. NA              D2                              
+3    45300. NA              D3                              
+4    45300. NA              D2                              
+5    45300. NA              D3                              
+6    45300. NA              D2                              
+# ℹ abbreviated name:
+#   ¹​`What year in dental school are you?`
+# ℹ 21 more variables: `What is your gender?` &lt;chr&gt;,
+#   `Over the last two weeks, how often have you lost interest or pleasure in doing things?` &lt;dbl&gt;,
+#   `Over the last two weeks, how often have you felt sad, low, down, depressed or hopeless?` &lt;dbl&gt;,
+#   `Over the last two weeks, how often have you had trouble falling or staying asleep, or sleeping too much?` &lt;dbl&gt;,
+#   `Over the last two weeks, how often have you felt tired or had little energy?` &lt;dbl&gt;, …</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "-------------------------"</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 22
+  Timestamp What year in dental sch…¹ `What is your gender?`
+      &lt;dbl&gt; &lt;chr&gt;                     &lt;chr&gt;                 
+1    45635. D3                        Female                
+2    45635. D3                        Female                
+3    45636. D1                        Female                
+4    45636. D1                        Female                
+5    45636. D1                        Female                
+6    45636. D1                        Female                
+# ℹ abbreviated name:
+#   ¹​`What year in dental school are you?`
+# ℹ 19 more variables:
+#   `Over the last two weeks, how often have you lost interest or pleasure in doing things?` &lt;chr&gt;,
+#   `Over the last 2 weeks, how often have you felt sad, low, down, depressed or hopeless?` &lt;chr&gt;,
+#   `Over the last 2 weeks, how often have you had trouble falling or staying asleep, or sleeping too much?` &lt;chr&gt;,
+#   `Over the last 2 weeks, how often have you felt tired or had little energy?` &lt;chr&gt;, …</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "-------------------------"</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 23
+  Timestamp           What year in dental school are you?\…¹
+  &lt;dttm&gt;              &lt;chr&gt;                                 
+1 2025-11-12 08:19:51 D3                                    
+2 2025-11-12 08:20:29 D3                                    
+3 2025-11-12 08:24:50 D2                                    
+4 2025-11-12 08:25:11 D2                                    
+5 2025-11-12 08:28:17 D3                                    
+6 2025-11-12 08:28:30 D4                                    
+# ℹ abbreviated name:
+#   ¹​`What year in dental school are you?\nMark only one oval.`
+# ℹ 21 more variables:
+#   `What is your gender?\nMark only one oval.` &lt;chr&gt;,
+#   `Over the last two weeks, how often have you lost interest or pleasure in doing things?\nMark only one oval.` &lt;chr&gt;,
+#   `Over the last 2 weeks, how often have you felt sad, low, down, depressed or hopeless?\nMark only one oval.` &lt;chr&gt;,
+#   `Over the last 2 weeks, how often have you had trouble falling or staying asleep, or sleeping too much?\nMark only one oval.` &lt;chr&gt;, …</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "==========="</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Timestamp"                                                                                                                                                                                                                                                                                                                                
+ [2] "Email Address"                                                                                                                                                                                                                                                                                                                            
+ [3] "What year in dental school are you?"                                                                                                                                                                                                                                                                                                      
+ [4] "What is your gender?"                                                                                                                                                                                                                                                                                                                     
+ [5] "Over the last two weeks, how often have you lost interest or pleasure in doing things?"                                                                                                                                                                                                                                                   
+ [6] "Over the last two weeks, how often have you felt sad, low, down, depressed or hopeless?"                                                                                                                                                                                                                                                  
+ [7] "Over the last two weeks, how often have you had trouble falling or staying asleep, or sleeping too much?"                                                                                                                                                                                                                                 
+ [8] "Over the last two weeks, how often have you felt tired or had little energy?"                                                                                                                                                                                                                                                             
+ [9] "Over the last two weeks, how often have you had a poor appetite or overeaten?"                                                                                                                                                                                                                                                            
+[10] "Over the last two weeks, how often have you felt bad about yourself, or that you are a failure or have let yourself or your family down?"                                                                                                                                                                                                 
+[11] "Over the last two weeks, how often have you had trouble concentrating on things, such as reading the newspaper or watching television?"                                                                                                                                                                                                   
+[12] "Over the last two weeks, how often have you moved or spoken so slowly that other people could have noticed. Or the opposite- being so figety or restless that you have been moving around a lot more than usual?"                                                                                                                         
+[13] "Using your own definition of “burnout”, please select one of the answers below:"                                                                                                                                                                                                                                                          
+[14] "In the last two weeks, how often are you feeling nervous, anxious, or on edge?"                                                                                                                                                                                                                                                           
+[15] "In the last two weeks, how often have you not been able to stop or control worrying?"                                                                                                                                                                                                                                                     
+[16] "In the last two weeks, how often have you been worrying too much about different things?"                                                                                                                                                                                                                                                 
+[17] "In the last two weeks, how often have you had trouble relaxing?"                                                                                                                                                                                                                                                                          
+[18] "In the last two weeks, how often have you been so restless that it is hard to sit still?"                                                                                                                                                                                                                                                 
+[19] "In the last two weeks, how often have you become easily annoyed or irritable?"                                                                                                                                                                                                                                                            
+[20] "In the last two weeks, how often have you felt afraid as if something awful might happen?"                                                                                                                                                                                                                                                
+[21] "Are you aware that the UNMC College of Dentistry has on-site counseling services available?"                                                                                                                                                                                                                                              
+[22] "How likely are you to use the UNMC College of Dentistry on-site counseling services?"                                                                                                                                                                                                                                                     
+[23] "Do you know how to access the UNMC College of Dentistry on-site counseling services?"                                                                                                                                                                                                                                                     
+[24] "If you are struggling and in need of support, please refer to the following resources. UNMC Counseling and Psychological Services: (402) 559-7276 (crisis counselors available 24/7). UNL Counseling and Psychological Services: (402) 472-7450 (available 24 hours) Suicide and crisis lifeline: 988. In case of an emergency, call 911."</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Timestamp"                                                                                                                                                                                                       
+ [2] "What year in dental school are you?"                                                                                                                                                                             
+ [3] "What is your gender?"                                                                                                                                                                                            
+ [4] "Over the last two weeks, how often have you lost interest or pleasure in doing things?"                                                                                                                          
+ [5] "Over the last 2 weeks, how often have you felt sad, low, down, depressed or hopeless?"                                                                                                                           
+ [6] "Over the last 2 weeks, how often have you had trouble falling or staying asleep, or sleeping too much?"                                                                                                          
+ [7] "Over the last 2 weeks, how often have you felt tired or had little energy?"                                                                                                                                      
+ [8] "Over the last 2 weeks, how often have you had a poor appetite or overeaten?"                                                                                                                                     
+ [9] "Over the last 2 weeks, how often have you felt bad about yourself, or that you are a failure or have let yourself or your family down?"                                                                          
+[10] "Over the last 2 weeks, how often have you had trouble concentrating on things, such as reading the newspaper or watching television?"                                                                            
+[11] "Over the last 2 weeks, how often have you moved or spoken so slowly that other people could have noticed. Or the opposite - being so fidgety or restless that you have been moving around a lot more than usual?"
+[12] "Using your definition of \"burnout\", please select one of the answers below:"                                                                                                                                   
+[13] "In the last 2 weeks, how often are you feeling nervous, anxious, or on edge?"                                                                                                                                    
+[14] "In the last 2 weeks, how often have you not been able to stop or control worrying?"                                                                                                                              
+[15] "In the last 2 weeks, how often have you been worrying too much about different things?"                                                                                                                          
+[16] "In the last 2 weeks, how often have you had trouble relaxing?"                                                                                                                                                   
+[17] "In the last 2 weeks, how often have you been so restless that is is hard to sit still?"                                                                                                                          
+[18] "In the last 2 weeks, how often have you become easily annoyed or irritable?"                                                                                                                                     
+[19] "In the last 2 weeks, how often have you felt afraid as if something awful might happen?"                                                                                                                         
+[20] "Are you familiar with UNMC CAPS that offers in-person and Telehealth counseling services?"                                                                                                                       
+[21] "How likely are you to use the CAPS counseling services, whether in-person at UNL's main campus or virtually?"                                                                                                    
+[22] "Do you know how to access the UNMC CAPS counseling services?"                                                                                                                                                    </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Timestamp"                                                                                                                                                                                                                              
+ [2] "What year in dental school are you?\nMark only one oval."                                                                                                                                                                               
+ [3] "What is your gender?\nMark only one oval."                                                                                                                                                                                              
+ [4] "Over the last two weeks, how often have you lost interest or pleasure in doing things?\nMark only one oval."                                                                                                                            
+ [5] "Over the last 2 weeks, how often have you felt sad, low, down, depressed or hopeless?\nMark only one oval."                                                                                                                             
+ [6] "Over the last 2 weeks, how often have you had trouble falling or staying asleep, or sleeping too much?\nMark only one oval."                                                                                                            
+ [7] "Over the last 2 weeks, how often have you felt tired or had little energy?\nMark only one oval."                                                                                                                                        
+ [8] "Over the last 2 weeks, how often have you had a poor appetite or overeaten?\nMark only one oval."                                                                                                                                       
+ [9] "Over the last 2 weeks, how often have you felt bad about yourself, or that you are a failure or have let yourself or your family down?\nMark only one oval."                                                                            
+[10] "Over the last 2 weeks, how often have you had trouble concentrating on things, such as reading the newspaper or watching television?\nMark only one oval."                                                                              
+[11] "Over the last 2 weeks, how often have you moved or spoken so slowly that other\npeople could have noticed. Or the opposite - being so fidgety or restless that you have been moving around a lot more than usual? \nMark only one oval."
+[12] "Using your definition of \"burnout\", please select one of the answers below:\nMark only one oval."                                                                                                                                     
+[13] "In the last 2 weeks, how often are you feeling nervous, anxious, or on edge?\nMark only one oval."                                                                                                                                      
+[14] "In the last 2 weeks, how often have you not been able to stop or control worrying?\nMark only one oval."                                                                                                                                
+[15] "In the last 2 weeks, how often have you been worrying too much about different things?\nMark only one oval."                                                                                                                            
+[16] "In the last 2 weeks, how often have you had trouble relaxing?\nMark only one oval."                                                                                                                                                     
+[17] "In the last 2 weeks, how often have you been so restless that is is hard to sit still?\nMark only one oval."                                                                                                                            
+[18] "In the last 2 weeks, how often have you become easily annoyed or irritable?\nMark only one oval."                                                                                                                                       
+[19] "In the last 2 weeks, how often have you felt afraid as if something awful might happen?\nMark only one oval."                                                                                                                           
+[20] "Are you familiar with UNMC CAPS that offers in-person and Telehealth counseling services?\nMark only one oval."                                                                                                                         
+[21] "How likely are you to use the CAPS counseling services, whether in-person at UNL's main campus or virtually? \nMark only one oval."                                                                                                     
+[22] "Do you know how to access the UNMC CAPS counseling services? \nMark only one oval."                                                                                                                                                     
+[23] "@"                                                                                                                                                                                                                                      </code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+   0    1    2    3 &lt;NA&gt; 
+ 703  529  126   50    0 </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+   0    1    2    3    4 &lt;NA&gt; 
+ 548  739  373  192    4    0 </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+   0    1    2    3    4 &lt;NA&gt; 
+ 422  477  192   74    3    0 </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Over the last two weeks, how often have you lost interest or pleasure in doing things?"                                                                                                                          
+ [2] "Over the last two weeks, how often have you felt sad, low, down, depressed or hopeless?"                                                                                                                         
+ [3] "Over the last two weeks, how often have you had trouble falling or staying asleep, or sleeping too much?"                                                                                                        
+ [4] "Over the last two weeks, how often have you felt tired or had little energy?"                                                                                                                                    
+ [5] "Over the last two weeks, how often have you had a poor appetite or overeaten?"                                                                                                                                   
+ [6] "Over the last two weeks, how often have you felt bad about yourself, or that you are a failure or have let yourself or your family down?"                                                                        
+ [7] "Over the last two weeks, how often have you had trouble concentrating on things, such as reading the newspaper or watching television?"                                                                          
+ [8] "Over the last two weeks, how often have you moved or spoken so slowly that other people could have noticed. Or the opposite- being so figety or restless that you have been moving around a lot more than usual?"
+ [9] "Using your own definition of “burnout”, please select one of the answers below:"                                                                                                                                 
+[10] "In the last two weeks, how often are you feeling nervous, anxious, or on edge?"                                                                                                                                  
+[11] "In the last two weeks, how often have you not been able to stop or control worrying?"                                                                                                                            
+[12] "In the last two weeks, how often have you been worrying too much about different things?"                                                                                                                        
+[13] "In the last two weeks, how often have you had trouble relaxing?"                                                                                                                                                 
+[14] "In the last two weeks, how often have you been so restless that it is hard to sit still?"                                                                                                                        
+[15] "In the last two weeks, how often have you become easily annoyed or irritable?"                                                                                                                                   
+[16] "In the last two weeks, how often have you felt afraid as if something awful might happen?"                                                                                                                       </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Over the last two weeks, how often have you lost interest or pleasure in doing things?"                                                                                                                          
+[2] "Over the last two weeks, how often have you felt sad, low, down, depressed or hopeless?"                                                                                                                         
+[3] "Over the last two weeks, how often have you had trouble falling or staying asleep, or sleeping too much?"                                                                                                        
+[4] "Over the last two weeks, how often have you felt tired or had little energy?"                                                                                                                                    
+[5] "Over the last two weeks, how often have you had a poor appetite or overeaten?"                                                                                                                                   
+[6] "Over the last two weeks, how often have you felt bad about yourself, or that you are a failure or have let yourself or your family down?"                                                                        
+[7] "Over the last two weeks, how often have you had trouble concentrating on things, such as reading the newspaper or watching television?"                                                                          
+[8] "Over the last two weeks, how often have you moved or spoken so slowly that other people could have noticed. Or the opposite- being so figety or restless that you have been moving around a lot more than usual?"</code></pre>
+</div>
+</div>
+</section>
+<section id="plotting-important" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="plotting-important"><span class="header-section-number">3</span> PLOTTING (IMPORTANT)</h2>
+<p>Now that we have done all of the data preparation, we have a single file (df_allYears) with all of the information. We can use this for plotting and</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="qmdReportSend_files/figure-html/plotting-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="qmdReportSend_files/figure-html/plotting-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="qmdReportSend_files/figure-html/plotting-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="qmdReportSend_files/figure-html/noweight-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="qmdReportSend_files/figure-html/noweight-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="qmdReportSend_files/figure-html/noweight-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="raw-analysis" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="raw-analysis"><span class="header-section-number">4</span> RAW ANALYSIS</h2>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>
+==================================
+ANALYSIS FOR: Class of 2026 
+[1] "--PHQ--"
+
+Call:
+lm(formula = PHQ_SCORE ~ Year_Num + I(Year_Num^2), data = sub_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-7.1250 -3.1250 -0.3103  1.8750 14.6897 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)     4.3103     0.7132   6.044 6.56e-08 ***
+Year_Num        4.8261     1.8154   2.658  0.00972 ** 
+I(Year_Num^2)  -2.0115     0.9463  -2.126  0.03706 *  
+---
+Signif. codes:  
+0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 3.841 on 70 degrees of freedom
+Multiple R-squared:  0.1046,    Adjusted R-squared:  0.07907 
+F-statistic: 4.091 on 2 and 70 DF,  p-value: 0.02088</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="qmdReportSend_files/figure-html/model%20check-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="qmdReportSend_files/figure-html/model%20check-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="qmdReportSend_files/figure-html/model%20check-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="qmdReportSend_files/figure-html/model%20check-4.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "--BUR--"
+
+Call:
+lm(formula = BUR_SCORE ~ Year_Num + I(Year_Num^2), data = sub_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-1.6875 -0.5000  0.3125  0.5517  1.5517 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)     1.4483     0.1490   9.722 1.27e-14 ***
+Year_Num        0.4526     0.3792   1.194    0.237    
+I(Year_Num^2)  -0.2134     0.1976  -1.079    0.284    
+---
+Signif. codes:  
+0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.8022 on 70 degrees of freedom
+Multiple R-squared:  0.02012,   Adjusted R-squared:  -0.007872 
+F-statistic: 0.7188 on 2 and 70 DF,  p-value: 0.4909</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="qmdReportSend_files/figure-html/model%20check-5.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="qmdReportSend_files/figure-html/model%20check-6.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="qmdReportSend_files/figure-html/model%20check-7.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="qmdReportSend_files/figure-html/model%20check-8.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "--GAD--"
+
+Call:
+lm(formula = GAD_SCORE ~ Year_Num + I(Year_Num^2), data = sub_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-6.7500 -2.1667 -0.1034  2.2500  9.2500 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)     4.1034     0.6449   6.363 1.77e-08 ***
+Year_Num        4.7615     1.6416   2.900  0.00498 ** 
+I(Year_Num^2)  -2.1149     0.8557  -2.472  0.01589 *  
+---
+Signif. codes:  
+0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 3.473 on 70 degrees of freedom
+Multiple R-squared:  0.113, Adjusted R-squared:  0.0877 
+F-statistic: 4.461 on 2 and 70 DF,  p-value: 0.01502</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="qmdReportSend_files/figure-html/model%20check-9.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="qmdReportSend_files/figure-html/model%20check-10.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="qmdReportSend_files/figure-html/model%20check-11.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="qmdReportSend_files/figure-html/model%20check-12.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+==================================
+ANALYSIS FOR: Class of 2027 
+[1] "--PHQ--"
+
+Call:
+lm(formula = PHQ_SCORE ~ Year_Num + I(Year_Num^2), data = sub_data)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-6.304 -2.714 -0.400  1.286 15.286 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)     5.4000     0.8206   6.580 8.97e-09 ***
+Year_Num        9.6516     2.1549   4.479 3.05e-05 ***
+I(Year_Num^2)  -4.7472     1.0492  -4.525 2.59e-05 ***
+---
+Signif. codes:  
+0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 4.103 on 66 degrees of freedom
+Multiple R-squared:  0.2388,    Adjusted R-squared:  0.2158 
+F-statistic: 10.36 on 2 and 66 DF,  p-value: 0.0001226</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="qmdReportSend_files/figure-html/model%20check-13.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="qmdReportSend_files/figure-html/model%20check-14.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="qmdReportSend_files/figure-html/model%20check-15.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="qmdReportSend_files/figure-html/model%20check-16.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "--BUR--"
+
+Call:
+lm(formula = BUR_SCORE ~ Year_Num + I(Year_Num^2), data = sub_data)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-1.5238 -0.5238 -0.1739  0.7200  2.4762 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)     1.2800     0.1549   8.264 8.92e-12 ***
+Year_Num        1.6659     0.4067   4.096 0.000117 ***
+I(Year_Num^2)  -0.7720     0.1980  -3.899 0.000229 ***
+---
+Signif. codes:  
+0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 0.7744 on 66 degrees of freedom
+Multiple R-squared:  0.2028,    Adjusted R-squared:  0.1786 
+F-statistic: 8.395 on 2 and 66 DF,  p-value: 0.0005644</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="qmdReportSend_files/figure-html/model%20check-17.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="qmdReportSend_files/figure-html/model%20check-18.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="qmdReportSend_files/figure-html/model%20check-19.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="qmdReportSend_files/figure-html/model%20check-20.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "--GAD--"
+
+Call:
+lm(formula = GAD_SCORE ~ Year_Num + I(Year_Num^2), data = sub_data)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-10.4348  -2.8000  -0.7143   2.2000  10.2857 
+
+Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)     4.8000     0.9205   5.215 1.99e-06 ***
+Year_Num       13.3124     2.4170   5.508 6.43e-07 ***
+I(Year_Num^2)  -6.6776     1.1768  -5.674 3.36e-07 ***
+---
+Signif. codes:  
+0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 4.602 on 66 degrees of freedom
+Multiple R-squared:  0.3282,    Adjusted R-squared:  0.3079 
+F-statistic: 16.12 on 2 and 66 DF,  p-value: 1.987e-06</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="qmdReportSend_files/figure-html/model%20check-21.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="qmdReportSend_files/figure-html/model%20check-22.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="qmdReportSend_files/figure-html/model%20check-23.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="qmdReportSend_files/figure-html/model%20check-24.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="summary-important" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="summary-important"><span class="header-section-number">5</span> SUMMARY (IMPORTANT)</h2>
+<p>We specifically look at two cohorts, the class of 2026 and 2027. Both the classes had significant negative squared terms for study year for the PHQ and GAD scores*, and significant positive terms for the non squared terms study year. The class of 2026 did not have a statistically significant coefficients for the burnout score, but class of 2027 did, and they also had a negative squared term and positive non squared term.</p>
+<ul>
+<li>note, one significant result (class of 2026 phq squared term) was not significant after doing anti-p-hacking adjustments</li>
+</ul>
+<p>TLDR: - people got much worse last year - this year the two cohorts were a bit better than last year in terms of depression (phq) and anxiety (gad), but the scores are still worse than the first year. Evidence for the same pattern for burnout was only found for the class of 2027.</p>
+<p>Here are the results from the models</p>
+<p>ANALYSIS FOR: Class of 2026</p>
+<p>PHQ Coefficients: Estimate Std. Error t value Pr(&gt;|t|)<br>
+(Intercept) 4.3103 0.7132 6.044 6.56e-08 <em><strong> Year_Num 4.8261 1.8154 2.658 0.00972 </strong> SIGNIF I(Year_Num^2) -2.0115 0.9463 -2.126 0.03706 </em><br>
+(note, after correcting for the familiy wise error rate)</p>
+<p>BUR Coefficients: Estimate Std. Error t value Pr(&gt;|t|)<br>
+(Intercept) 1.4483 0.1490 9.722 1.27e-14 *** Year_Num 0.4526 0.3792 1.194 0.237<br>
+I(Year_Num^2) -0.2134 0.1976 -1.079 0.284</p>
+<p>GAD Coefficients: Estimate Std. Error t value Pr(&gt;|t|)<br>
+(Intercept) 4.1034 0.6449 6.363 1.77e-08 <em><strong> Year_Num 4.7615 1.6416 2.900 0.00498 </strong> SIGNIF I(Year_Num^2) -2.1149 0.8557 -2.472 0.01589 </em> SIGNIF</p>
+<p>ANALYSIS FOR: Class of 2027</p>
+<p>PHQ Coefficients: Estimate Std. Error t value Pr(&gt;|t|)<br>
+(Intercept) 5.4000 0.8206 6.580 8.97e-09 <strong><em> Year_Num 9.6516 2.1549 4.479 3.05e-05 </em></strong> SIGNIF I(Year_Num^2) -4.7472 1.0492 -4.525 2.59e-05 *** SIGNIF</p>
+<p>BUR Coefficients: Estimate Std. Error t value Pr(&gt;|t|)<br>
+(Intercept) 1.2800 0.1549 8.264 8.92e-12 <strong><em> Year_Num 1.6659 0.4067 4.096 0.000117 </em></strong> SIGNIF I(Year_Num^2) -0.7720 0.1980 -3.899 0.000229 *** SIGNIF</p>
+<p>GAD Coefficients: Estimate Std. Error t value Pr(&gt;|t|)<br>
+(Intercept) 4.8000 0.9205 5.215 1.99e-06 <strong><em> Year_Num 13.3124 2.4170 5.508 6.43e-07 </em></strong> SIGNIF I(Year_Num^2) -6.6776 1.1768 -5.674 3.36e-07 *** SIGNIF</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

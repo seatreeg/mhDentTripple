@@ -1,0 +1,501 @@
+---
+title: "Mental Health Analysis: 2023-2026"
+author: "Carson Trego"
+date: "2026-01-12"
+format:
+  html:
+    toc: true
+    number-sections: true
+    colorlinks: true
+    mainfont: "Calibri"
+    monofont: "Consolas"
+    fontsize: 0.2em
+    code-overflow: wrap
+editor: visual
+execute:
+  echo: false
+  warning: false
+---
+
+## DESCRIPTION
+
+Across the last three years, three surveys were taken using almost the exact same methodology. Dental school students were asked to take a set of mental health surveys, and 3 metrics were scored (PHQ9,BURNOUT MINI Z,GAD7) Ids were not taken, and given the size of the school, it is very likely that many of the participants are the same people, so a person may have taken the quiz as a first year in the first survey, a second year in the second survey, and a third year in the third survey, and we would not be able to tell.
+
+## PREPARATION
+
+We have separate files with separate schemes for how the data is recorded, and we need to modify the data to all be in the same format. This whole section is that process, but it contains no analysis or plotting. For information to put on the abstract, skip to the PLOTTING and ANALYSIS sections.
+
+```{r imports and startup }
+library(dplyr)
+library(ggplot2)
+library(readxl)
+library(readr)
+
+options(width = 60)
+
+
+reSeed <- 1 # seed for reproducabilty
+list.files()
+```
+
+```{r load data}
+df_23_24_orig <- read_excel('doNotModifyJustRead\\2023-2024 CDCSV.xlsx')
+df_24_25_orig <- read_excel('doNotModifyJustRead\\2024-2025 CDCSV.xlsx')
+df_25_26_orig <- read_excel('doNotModifyJustRead\\2025-2026 CDCSV.xlsx')
+
+head(df_23_24_orig)
+print('-------------------------')
+head(df_24_25_orig)
+print('-------------------------')
+head(df_25_26_orig)
+```
+
+```{r get name info}
+print('===========')
+colnames(df_23_24_orig)
+colnames(df_24_25_orig)
+colnames(df_25_26_orig)
+```
+
+```{r get col names}
+
+
+# 23-24
+names_ALL_23_24 <- colnames(df_23_24_orig[5:20]) # ALL
+names_PHQ_23_24 <- colnames(df_23_24_orig[5:12]) # PHQ 8
+names_BUR_23_24 <- colnames(df_23_24_orig[13:13]) # BURN
+names_GAD_23_24 <- colnames(df_23_24_orig[14:20]) # GAD 7
+
+
+# 24-25
+names_ALL_24_25 <- colnames(df_24_25_orig[4:19]) # ALL
+names_PHQ_24_25 <- colnames(df_24_25_orig[4:11]) # PHQ 8
+names_BUR_24_25 <- colnames(df_24_25_orig[12:12]) # BURN
+names_GAD_24_25 <- colnames(df_24_25_orig[13:19]) # GAD 7
+
+
+# 25-26
+names_ALL_25_26 <- colnames(df_25_26_orig[4:19]) # ALL
+names_PHQ_25_26 <- colnames(df_25_26_orig[4:11]) # PHQ 8
+names_BUR_25_26 <- colnames(df_25_26_orig[12:12]) # BURN
+names_GAD_25_26 <- colnames(df_25_26_orig[13:19]) # GAD 7
+```
+
+```{python write ans, eval=FALSE}
+"""
+23-25
+BURN
+0 0
+1 1
+2 2
+3 3
+4 4 FOR SOME REASON, NO ONE ANSWERED 4
+
+
+24-25
+BURN
+THIS IS THE ORDER GIVEN BY THE MINI Z Q3
+0 I enjoy my school, I have no symptoms of burnout.
+1 I am under stress, and don't always have as much energy as I did, but I don't feel burned out.
+2 I am definitely burning out and have one or more symptoms of burnout e.g. emotional exhaustion.
+3 The symptoms of burnout that I'm experiencing won't go away. I think about school frustrations a lot.
+4 I feel completely burned out. I am the point where I may need to seek help.
+
+ALL ELSE
+THIS IS THE ORDER GIVEN BY THE PHQ 9 AND GAD
+0 Not at all
+1 Several days
+2 More than half the days
+3 Nearly every day
+
+
+25-26
+0 I enjoy my school, I have no symptoms of burnout.
+1 I am under stress, and don't always have as much energy as I did, but I don't feel burned out.
+2 I am definitely burning out and have one or more symptoms of burnout e.g. emotional exhaustion.
+3 The symptoms of burnout that I'm experiencing won't go away. I think about school frustrations a lot.
+4 I feel completely burned out. I am the point where I may need to seek help.
+
+ALL ELSE
+0 Not at all
+1 Several Days 
+1 Several days 
+2 More than half the days
+2 More then half the days
+3 Nealry every day 
+3 Nearly every day 
+
+"""
+```
+
+```{r get possible answers}
+
+if (FALSE){
+  table(df_23_24_orig[12])#[5:20])
+  
+  table(unlist( df_23_24_orig[, 5:20]), useNA = "always" )
+  table(unlist( df_24_25_orig[, 4:19]), useNA = "always" )
+  table(unlist( df_25_26_orig[, 4:19]), useNA = "always" )
+  
+  
+  table(unlist( df_23_24_orig[, 13:13]), useNA = "always" )
+  table(unlist( df_24_25_orig[, 12:12]), useNA = "always" )
+  table(unlist( df_25_26_orig[, 12:12]), useNA = "always" )
+}
+
+
+
+
+
+map_scheme <- c(
+  "I enjoy my school, I have no symptoms of burnout." = 0,
+  "I am under stress, and don't always have as much energy as I did, but I don't feel burned out." = 1,
+  "I am definitely burning out and have one or more symptoms of burnout e.g. emotional exhaustion." = 2,
+  "The symptoms of burnout that I'm experiencing won't go away. I think about school frustrations a lot." = 3,
+  "I feel completely burned out. I am the point where I may need to seek help." = 4,
+  "Not at all" = 0,
+  "Several days" = 1,
+  "More than half the days" = 2,
+  "Nearly every day" = 3,
+  "Several Days" = 1,
+  "More then half the days" = 2,
+  "Nealry every day" = 3,
+  "0" = 0,
+  "1" = 1,
+  "2" = 2,
+  "3" = 3,
+  "4" = 4
+)
+
+
+#df_23_24_mapped <- df_23_24_orig %>%
+#  mutate(across(5:20, ~ map_scheme[.x] ))
+#table(unlist( df_23_24_mapped[, 5:20]), useNA = "always" )
+
+
+df_23_24_mapped <- df_23_24_orig %>%
+  mutate(across(5:20, ~ recode(as.character(.x), !!!map_scheme, .default = NA_real_ )))
+table(unlist( df_23_24_mapped[, 5:20]), useNA = "always")
+
+
+
+df_24_25_mapped <- df_24_25_orig %>%
+  mutate(across(4:20, ~ recode(.x, !!!map_scheme, .default = NA_real_ )))
+table(unlist( df_24_25_mapped[, 4:19]), useNA = "always")
+
+
+df_25_26_mapped <- df_25_26_orig %>%
+  mutate(across(4:20, ~ recode(.x, !!!map_scheme, .default = NA_real_)))
+table(unlist( df_25_26_mapped[, 4:19]), useNA = "always" )
+
+
+colnames(df_23_24_mapped[5:20])
+colnames(df_23_24_mapped[names_PHQ_23_24])
+
+df_23_24_mapped <- df_23_24_mapped %>%
+  mutate( PHQ_SCORE = rowSums(across(all_of(names_PHQ_23_24) ), na.rm=FALSE)) %>%
+  mutate( BUR_SCORE = rowSums(across(all_of(names_BUR_23_24) ), na.rm=FALSE)) %>%
+  mutate( GAD_SCORE = rowSums(across(all_of(names_GAD_23_24) ), na.rm=FALSE))
+  
+
+df_24_25_mapped <- df_24_25_mapped %>%
+  mutate( PHQ_SCORE = rowSums(across(all_of(names_PHQ_24_25) ), na.rm=FALSE)) %>%
+  mutate( BUR_SCORE = rowSums(across(all_of(names_BUR_24_25) ), na.rm=FALSE)) %>%
+  mutate( GAD_SCORE = rowSums(across(all_of(names_GAD_24_25) ), na.rm=FALSE))
+
+df_25_26_mapped <- df_25_26_mapped %>%
+  mutate( PHQ_SCORE = rowSums(across(all_of(names_PHQ_25_26) ), na.rm=FALSE)) %>%
+  mutate( BUR_SCORE = rowSums(across(all_of(names_BUR_25_26) ), na.rm=FALSE)) %>%
+  mutate( GAD_SCORE = rowSums(across(all_of(names_GAD_25_26) ), na.rm=FALSE))
+
+
+
+
+df_23_24_mapped <- df_23_24_mapped %>%
+  rename_with(~ paste0("PHQQ", seq_along(names_PHQ_23_24)), all_of(names_PHQ_23_24)) %>%
+  rename_with(~ paste0("BURNQ", seq_along(names_BUR_23_24)), all_of(names_BUR_23_24)) %>%
+  rename_with(~ paste0("GADQ", seq_along(names_GAD_23_24)), all_of(names_GAD_23_24))
+
+df_24_25_mapped <- df_24_25_mapped %>%
+  rename_with(~ paste0("PHQQ", seq_along(names_PHQ_24_25)), all_of(names_PHQ_24_25)) %>%
+  rename_with(~ paste0("BURNQ", seq_along(names_BUR_24_25)), all_of(names_BUR_24_25)) %>%
+  rename_with(~ paste0("GADQ", seq_along(names_GAD_24_25)), all_of(names_GAD_24_25))
+
+df_25_26_mapped <- df_25_26_mapped %>%
+  rename_with(~ paste0("PHQQ", seq_along(names_PHQ_25_26)), all_of(names_PHQ_25_26)) %>%
+  rename_with(~ paste0("BURNQ", seq_along(names_BUR_25_26)), all_of(names_BUR_25_26)) %>%
+  rename_with(~ paste0("GADQ", seq_along(names_GAD_25_26)), all_of(names_GAD_25_26))
+
+
+df_23_24_mapped <- df_23_24_mapped %>%
+  rename(D_YEAR = `What year in dental school are you?`)
+
+df_24_25_mapped <- df_24_25_mapped %>%
+  rename(D_YEAR = `What year in dental school are you?`)
+
+df_25_26_mapped <- df_25_26_mapped %>%
+  rename(D_YEAR = `What year in dental school are you?\nMark only one oval.`)
+
+
+# --- COHORT  ---
+calculate_cohort <- function(d_year_str, survey_year_str) {
+  # GET BASE YEAR
+  base_year <- as.numeric(substr(survey_year_str, 1, 4))
+  
+  # CONVERT YEAR TO NUM
+  year_num <- case_when(
+    grepl("1|first|one", tolower(d_year_str)) ~ 1,
+    grepl("2|second|two", tolower(d_year_str)) ~ 2,
+    grepl("3|third|three", tolower(d_year_str)) ~ 3,
+    grepl("4|fourth|four", tolower(d_year_str)) ~ 4,
+    TRUE ~ NA_real_
+  )
+  
+  # CALCULATE GRADUATION YEAR
+  cohort_year <- base_year + 5 - year_num
+  
+  return(paste("Class of", cohort_year))
+}
+# ---------------------------
+
+cols_to_keep = cols_to_keep <- c("PHQ_SCORE", 
+                                 "BUR_SCORE", 
+                                 "GAD_SCORE",
+                                 "PHQQ1",
+                                 "PHQQ2",
+                                 "PHQQ3",
+                                 "PHQQ4",
+                                 "PHQQ5",
+                                 "PHQQ6",
+                                 "PHQQ7",
+                                 "PHQQ8",
+                                 "BURNQ1",
+                                 "GADQ1",
+                                 "GADQ2",
+                                 "GADQ3",
+                                 "GADQ4",
+                                 "GADQ5",
+                                 "GADQ6",
+                                 "GADQ7",
+                                 "D_YEAR",
+                                 "Timestamp"
+                                 )
+df_list <- list(
+  "2023-2024" = df_23_24_mapped %>% 
+    mutate(Timestamp = as.character(Timestamp)) %>%
+    select(any_of(cols_to_keep)),
+  "2024-2025" = df_24_25_mapped %>%
+    mutate(Timestamp = as.character(Timestamp)) %>%
+    select(any_of(cols_to_keep)),
+  "2025-2026" = df_25_26_mapped %>%
+    mutate(Timestamp = as.character(Timestamp)) %>%
+    select(any_of(cols_to_keep))
+)
+
+df_allYears <- bind_rows(df_list, .id = "Year") %>%
+  mutate(Cohort = mapply(calculate_cohort, D_YEAR, Year))
+
+```
+
+## PLOTTING (IMPORTANT)
+
+Now that we have done all of the data preparation, we have a single file (df_allYears) with all of the information. We can use this for plotting and
+
+```{r plotting}
+# Filter out unknown cohorts
+plot_data <- df_allYears %>% filter(!grepl("NA", Cohort))
+
+ggplot(plot_data, aes(x = Year, y = PHQ_SCORE, fill = Cohort)) +
+  geom_violin(trim = FALSE, alpha = 0.5) + 
+  geom_boxplot(width = 0.1, color = "black", outlier.shape = NA) + 
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "red") +
+  stat_summary(fun = mean, geom = "line", aes(group = 1), color = "red", linewidth = 1) +
+  facet_wrap(~Cohort) +  # <--- CRITICAL CHANGE: Facet by Cohort
+  theme_minimal() +
+  labs(x = "Academic Year", 
+       y = "PHQ Score",
+       title = "PHQ Scores by Cohort (Tracking the same 'Group')",
+       subtitle = "Red line = Mean Trajectory of that Class") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+
+ggplot(plot_data, aes(x = Year, y = BUR_SCORE, fill = Cohort)) +
+  geom_violin(trim = FALSE, alpha = 0.5) + 
+  geom_boxplot(width = 0.1, color = "black", outlier.shape = NA) + 
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "red") +
+  stat_summary(fun = mean, geom = "line", aes(group = 1), color = "red", linewidth = 1) +
+  facet_wrap(~Cohort) +
+  theme_minimal() +
+  labs(x = "Academic Year", 
+       y = "BURN Score",
+       title = "BURN Scores by Cohort",
+       subtitle = "Red line = Mean Trajectory of that Class") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+
+ggplot(plot_data, aes(x = Year, y = GAD_SCORE, fill = Cohort)) +
+  geom_violin(trim = FALSE, alpha = 0.5) + 
+  geom_boxplot(width = 0.1, color = "black", outlier.shape = NA) + 
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "red") +
+  stat_summary(fun = mean, geom = "line", aes(group = 1), color = "red", linewidth = 1) +
+  facet_wrap(~Cohort) +
+  theme_minimal() +
+  labs(x = "Academic Year", 
+       y = "GAD Score",
+       title = "GAD Scores by Cohort",
+       subtitle = "Red line = Mean Trajectory of that Class") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+```
+
+```{r noweight}
+
+
+
+df_means <- df_allYears %>%
+  group_by(Year) %>%
+  summarise(
+    PHQ_mean = mean(PHQ_SCORE, na.rm = TRUE),
+    BUR_mean = mean(BUR_SCORE, na.rm = TRUE),
+    GAD_mean = mean(GAD_SCORE, na.rm = TRUE)
+  )
+
+
+
+p1 <- ggplot(df_allYears, aes(x = Year, y = PHQ_SCORE, fill = Year)) +
+  geom_violin(alpha = 0.5, trim = FALSE) +
+  geom_boxplot(width = 0.1, color = "black", outlier.shape = NA) + 
+  geom_point(data = df_means, aes(y = PHQ_mean), shape = 18, size = 4, color = "red") +
+  geom_line(data = df_means, aes(y = PHQ_mean, group = 1), color = "red", linewidth = 1) +
+  theme_minimal() +
+  labs(x = "Academic Year", y = "PHQ Score",
+       title = "PHQ", subtitle = "Red line = Mean")
+
+
+p2 <- ggplot(df_allYears, aes(x = Year, y = BUR_SCORE, fill = Year)) +
+  geom_violin(alpha = 0.5, trim = FALSE) +
+  geom_boxplot(width = 0.1, color = "black", outlier.shape = NA) + 
+  geom_point(data = df_means, aes(y = BUR_mean), shape = 18, size = 4, color = "red") +
+  geom_line(data = df_means, aes(y = BUR_mean, group = 1), color = "red", linewidth = 1) +
+  theme_minimal() +
+  labs(x = "Academic Year", y = "BURN Score",
+       title = "BURN", subtitle = "Red line = Mean")
+
+p3 <- ggplot(df_allYears, aes(x = Year, y = GAD_SCORE, fill = Year)) +
+  geom_violin(alpha = 0.5, trim = FALSE) +
+  geom_boxplot(width = 0.1, color = "black", outlier.shape = NA) + 
+  geom_point(data = df_means, aes(y = GAD_mean), shape = 18, size = 4, color = "red") +
+  geom_line(data = df_means, aes(y = GAD_mean, group = 1), color = "red", linewidth = 1) +
+  theme_minimal() +
+  labs(x = "Academic Year", y = "GAD Score",
+       title = "GAD", subtitle = "Red line = Mean")
+
+# Display the plots
+print(p1)
+print(p2)
+print(p3)
+```
+
+## RAW ANALYSIS
+
+```{r model check}
+# Filter for analysis
+df_model <- df_allYears %>%
+  filter(!grepl("NA", Cohort)) %>%
+  mutate(
+    Year_Num = case_when(
+      Year == "2023-2024" ~ 0,
+      Year == "2024-2025" ~ 1,
+      Year == "2025-2026" ~ 2
+    ),
+    D_YEAR = as.factor(D_YEAR) 
+  )
+
+
+# does the Year effect differ by Cohort?
+#phq_model_interaction <- lm(PHQ_SCORE ~ Year_Num * Cohort, data = df_model)
+#summary(phq_model_interaction)
+#anova(phq_model_interaction)
+
+# Separate models per cohort 
+cohorts <- unique(df_model$Cohort)
+for (c in c("Class of 2026","Class of 2027") ) {
+  cat("\n==================================\n")
+  cat("ANALYSIS FOR:", c, "\n")
+  sub_data <- df_model %>% filter(Cohort == c)
+  
+  # Only run if we have multiple years of data for this cohort
+  if (length(unique(sub_data$Year)) > 1) {
+    print("--PHQ--")
+    mod <- lm(PHQ_SCORE ~ Year_Num+I(Year_Num^2), data = sub_data)
+    print(summary(mod))
+    plot(mod)
+    print("--BUR--")
+    mod <- lm(BUR_SCORE ~ Year_Num+I(Year_Num^2), data = sub_data)
+    print(summary(mod))
+    plot(mod)
+    print("--GAD--")
+    mod <- lm(GAD_SCORE ~ Year_Num+I(Year_Num^2), data = sub_data)
+    print(summary(mod))
+    plot(mod)
+  } else {
+    cat("Not enough longitudinal data for this cohort.\n")
+  }
+}
+```
+
+
+
+## SUMMARY (IMPORTANT)
+
+We specifically look at two cohorts, the class of 2026 and 2027. Both the classes had significant negative squared terms for study year for the PHQ and GAD scores*, and significant positive terms for the non squared terms study year. The class of 2026 did not have a statistically significant coefficients for the burnout score, but class of 2027 did, and they also had a negative squared term and positive non squared term.
+
+* note, one significant result (class of 2026 phq squared term) was not significant after doing anti-p-hacking adjustments
+
+TLDR: - people got much worse last year - this year the two cohorts  were a bit better than last year in terms of depression (phq) and anxiety (gad), but the scores are still worse than the first year.
+Evidence for the same pattern for burnout was only found for the class of 2027.
+
+
+Here are the results from the models
+
+ANALYSIS FOR: Class of 2026 
+
+PHQ Coefficients:
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)     4.3103     0.7132   6.044 6.56e-08 ***
+Year_Num        4.8261     1.8154   2.658  0.00972 **  SIGNIF
+I(Year_Num^2)  -2.0115     0.9463  -2.126  0.03706 *   
+(note, after correcting for the familiy wise error rate)
+
+BUR Coefficients:
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)     1.4483     0.1490   9.722 1.27e-14 ***
+Year_Num        0.4526     0.3792   1.194    0.237    
+I(Year_Num^2)  -0.2134     0.1976  -1.079    0.284    
+
+GAD Coefficients:
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)     4.1034     0.6449   6.363 1.77e-08 ***
+Year_Num        4.7615     1.6416   2.900  0.00498 ** SIGNIF
+I(Year_Num^2)  -2.1149     0.8557  -2.472  0.01589 *  SIGNIF
+
+
+
+
+
+ANALYSIS FOR: Class of 2027 
+
+PHQ Coefficients:
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)     5.4000     0.8206   6.580 8.97e-09 ***
+Year_Num        9.6516     2.1549   4.479 3.05e-05 *** SIGNIF
+I(Year_Num^2)  -4.7472     1.0492  -4.525 2.59e-05 *** SIGNIF
+
+BUR Coefficients:
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)     1.2800     0.1549   8.264 8.92e-12 ***
+Year_Num        1.6659     0.4067   4.096 0.000117 *** SIGNIF
+I(Year_Num^2)  -0.7720     0.1980  -3.899 0.000229 *** SIGNIF
+
+GAD Coefficients:
+              Estimate Std. Error t value Pr(>|t|)    
+(Intercept)     4.8000     0.9205   5.215 1.99e-06 ***
+Year_Num       13.3124     2.4170   5.508 6.43e-07 *** SIGNIF
+I(Year_Num^2)  -6.6776     1.1768  -5.674 3.36e-07 *** SIGNIF
