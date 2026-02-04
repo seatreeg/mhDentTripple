@@ -3,7 +3,7 @@ title: "Mental Health Analysis: 2023-2026"
 author: "Carson Trego"
 date: "2026-01-12"
 format:
-  html:
+  pdf:
     toc: true
     number-sections: true
     colorlinks: true
@@ -185,7 +185,7 @@ table(unlist( df_24_25_mapped[, 4:19]), useNA = "always")
 
 
 df_25_26_mapped <- df_25_26_orig %>%
-  mutate(across(4:20, ~ recode(.x, !!!map_scheme, .default = NA_real_)))
+  mutate(across(4:19, ~ recode(.x, !!!map_scheme, .default = NA_real_)))
 table(unlist( df_25_26_mapped[, 4:19]), useNA = "always" )
 
 
@@ -234,7 +234,8 @@ df_24_25_mapped <- df_24_25_mapped %>%
   rename(D_YEAR = `What year in dental school are you?`)
 
 df_25_26_mapped <- df_25_26_mapped %>%
-  rename(D_YEAR = `What year in dental school are you?\nMark only one oval.`)
+  rename(D_YEAR = `What year in dental school are you?
+Mark only one oval.`)
 
 
 # --- COHORT  ---
@@ -305,44 +306,49 @@ Now that we have done all of the data preparation, we have a single file (df_all
 # Filter out unknown cohorts
 plot_data <- df_allYears %>% filter(!grepl("NA", Cohort))
 
-ggplot(plot_data, aes(x = Year, y = PHQ_SCORE, fill = Cohort)) +
+phq_cohort <- ggplot(plot_data, aes(x = Year, y = PHQ_SCORE, fill = Cohort)) +
   geom_violin(trim = FALSE, alpha = 0.5) + 
   geom_boxplot(width = 0.1, color = "black", outlier.shape = NA) + 
-  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "red") +
-  stat_summary(fun = mean, geom = "line", aes(group = 1), color = "red", linewidth = 1) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "black") +
+  stat_summary(fun = mean, geom = "line", aes(group = 1), color = "black", linewidth = 1) +
   facet_wrap(~Cohort) +  # <--- CRITICAL CHANGE: Facet by Cohort
   theme_minimal() +
   labs(x = "Academic Year", 
-       y = "PHQ Score",
-       title = "PHQ Scores by Cohort (Tracking the same 'Group')",
-       subtitle = "Red line = Mean Trajectory of that Class") +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+       y = "PHQ-9 Score",
+       title = "PHQ-9 Scores by Cohort",
+       subtitle = "Higher scores indicate greater depression severity. Black Line = Mean Score per Class Each Year") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1), legend.position = "none")
 
-ggplot(plot_data, aes(x = Year, y = BUR_SCORE, fill = Cohort)) +
+bur_cohort <- ggplot(plot_data, aes(x = Year, y = BUR_SCORE, fill = Cohort)) +
   geom_violin(trim = FALSE, alpha = 0.5) + 
   geom_boxplot(width = 0.1, color = "black", outlier.shape = NA) + 
-  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "red") +
-  stat_summary(fun = mean, geom = "line", aes(group = 1), color = "red", linewidth = 1) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "black") +
+  stat_summary(fun = mean, geom = "line", aes(group = 1), color = "black", linewidth = 1) +
   facet_wrap(~Cohort) +
   theme_minimal() +
   labs(x = "Academic Year", 
-       y = "BURN Score",
-       title = "BURN Scores by Cohort",
-       subtitle = "Red line = Mean Trajectory of that Class") +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+       y = "Burnout Score",
+       title = "Burnout Scores by Cohort",
+       subtitle = "Higher scores indicate greater burnout severity. Black Line = Mean Score per Class Each Year") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1), legend.position = "none")
 
-ggplot(plot_data, aes(x = Year, y = GAD_SCORE, fill = Cohort)) +
+gad_cohort <- ggplot(plot_data, aes(x = Year, y = GAD_SCORE, fill = Cohort)) +
   geom_violin(trim = FALSE, alpha = 0.5) + 
   geom_boxplot(width = 0.1, color = "black", outlier.shape = NA) + 
-  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "red") +
-  stat_summary(fun = mean, geom = "line", aes(group = 1), color = "red", linewidth = 1) +
+  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, color = "black") +
+  stat_summary(fun = mean, geom = "line", aes(group = 1), color = "black", linewidth = 1) +
   facet_wrap(~Cohort) +
   theme_minimal() +
   labs(x = "Academic Year", 
-       y = "GAD Score",
-       title = "GAD Scores by Cohort",
-       subtitle = "Red line = Mean Trajectory of that Class") +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1))
+       y = "GAD-7 Score",
+       title = "GAD-7 Scores by Cohort",
+       subtitle = "Higher scores indicate greater anxiety severity. Black Line = Mean Score per Class Each Year") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1), legend.position = "none")
+
+
+ggsave("PHQ_Cohort_Square.png", plot = phq_cohort, width = 8, height = 8, units = "in", dpi = 300, bg = "white")
+ggsave("BURN_Cohort_Square.png", plot = bur_cohort, width = 8, height = 8, units = "in", dpi = 300, bg = "white")
+ggsave("GAD_Cohort_Square.png", plot = gad_cohort, width = 8, height = 8, units = "in", dpi = 300, bg = "white")
 ```
 
 ```{r noweight}
@@ -360,32 +366,32 @@ df_means <- df_allYears %>%
 
 
 p1 <- ggplot(df_allYears, aes(x = Year, y = PHQ_SCORE, fill = Year)) +
-  geom_violin(alpha = 0.5, trim = FALSE) +
+  geom_violin(alpha = 0.5, trim = FALSE, bw=0.5) +
   geom_boxplot(width = 0.1, color = "black", outlier.shape = NA) + 
   geom_point(data = df_means, aes(y = PHQ_mean), shape = 18, size = 4, color = "red") +
   geom_line(data = df_means, aes(y = PHQ_mean, group = 1), color = "red", linewidth = 1) +
   theme_minimal() +
   labs(x = "Academic Year", y = "PHQ Score",
-       title = "PHQ", subtitle = "Red line = Mean")
+       title = "PHQ", subtitle = "Black Line = Mean")
 
 
 p2 <- ggplot(df_allYears, aes(x = Year, y = BUR_SCORE, fill = Year)) +
-  geom_violin(alpha = 0.5, trim = FALSE) +
+  geom_violin(alpha = 0.5, trim = FALSE, bw=0.5) +
   geom_boxplot(width = 0.1, color = "black", outlier.shape = NA) + 
   geom_point(data = df_means, aes(y = BUR_mean), shape = 18, size = 4, color = "red") +
   geom_line(data = df_means, aes(y = BUR_mean, group = 1), color = "red", linewidth = 1) +
   theme_minimal() +
   labs(x = "Academic Year", y = "BURN Score",
-       title = "BURN", subtitle = "Red line = Mean")
+       title = "BURN", subtitle = "Black Line = Mean")
 
 p3 <- ggplot(df_allYears, aes(x = Year, y = GAD_SCORE, fill = Year)) +
-  geom_violin(alpha = 0.5, trim = FALSE) +
+  geom_violin(alpha = 0.5, trim = FALSE, bw=0.5) +
   geom_boxplot(width = 0.1, color = "black", outlier.shape = NA) + 
   geom_point(data = df_means, aes(y = GAD_mean), shape = 18, size = 4, color = "red") +
   geom_line(data = df_means, aes(y = GAD_mean, group = 1), color = "red", linewidth = 1) +
   theme_minimal() +
   labs(x = "Academic Year", y = "GAD Score",
-       title = "GAD", subtitle = "Red line = Mean")
+       title = "GAD", subtitle = "Black Line = Mean")
 
 # Display the plots
 print(p1)
@@ -441,6 +447,280 @@ for (c in c("Class of 2026","Class of 2027") ) {
 }
 ```
 
+```{r within most recent year}
+df_recent <- df_allYears %>% 
+  filter(Year == "2025-2026") %>%
+  mutate(D_YEAR = as.factor(D_YEAR))
+
+
+k_phq <- kruskal.test(PHQ_SCORE ~ D_YEAR, data =df_recent)
+lm_phq <- lm(PHQ_SCORE ~ D_YEAR, data =df_recent)
+summary(lm_phq)
+# plot(lm(PHQ_SCORE ~ D_YEAR, data =df_recent))
+
+k_bur <- kruskal.test(BUR_SCORE ~ D_YEAR, data =df_recent)
+lm_bur <- lm(BUR_SCORE ~ D_YEAR, data =df_recent)
+summary(lm_bur)
+# plot(lm(BUR_SCORE ~ D_YEAR, data =df_recent))
+
+k_gad <- kruskal.test(GAD_SCORE ~ D_YEAR, data =df_recent)
+lm_gad <- lm(GAD_SCORE ~ D_YEAR, data =df_recent)
+summary(lm_gad)
+# plot(lm(GAD_SCORE ~ D_YEAR, data =df_recent))
+
+get_lm_p <- function(model) {
+  if (is.null(summary(model)$fstatistic)) return(NA)
+  f <- summary(model)$fstatistic
+  pf(f[1], f[2], f[3], lower.tail = FALSE)
+}
+
+# Kruskal-Wallis
+raw_p_kw <- c(
+  PHQ = k_phq$p.value,
+  BUR = k_bur$p.value,
+  GAD = k_gad$p.value
+)
+adj_p_kw <- p.adjust(raw_p_kw, method = "holm")
+
+# Linear Model (ANOVA)
+raw_p_lm <- c(
+  PHQ = get_lm_p(lm_phq),
+  BUR = get_lm_p(lm_bur),
+  GAD = get_lm_p(lm_gad)
+)
+adj_p_lm <- p.adjust(raw_p_lm, method = "holm")
+
+
+print("--- KRUSKAL-WALLIS RESULTS (Holm Adjusted) ---")
+print(data.frame(
+  Outcome = names(raw_p_kw),
+  Raw_P = round(raw_p_kw, 5),
+  Adj_P = round(adj_p_kw, 5),
+  Signif = ifelse(adj_p_kw < 0.05, "*", "")
+))
+
+print("--- LINEAR MODEL RESULTS (Holm Adjusted) ---")
+print(data.frame(
+  Outcome = names(raw_p_lm),
+  Raw_P = round(raw_p_lm, 5),
+  Adj_P = round(adj_p_lm, 5),
+  Signif = ifelse(adj_p_lm < 0.05, "*", "")
+))
+```
+
+```{r pairwise recent}
+
+cat("\n=================================================\n")
+cat("PAIRWISE COMPARISONS (2025-2026 Data)\n")
+cat("Test: Pairwise Wilcoxon Rank Sum (Holm-Adjusted)\n")
+cat("=================================================\n")
+
+cat("\n--- PHQ-9 Pairwise ---\n")
+print(pairwise.wilcox.test(df_recent$PHQ_SCORE, df_recent$D_YEAR, p.adjust.method = "holm"))
+
+cat("\n--- Burnout Pairwise ---\n")
+print(pairwise.wilcox.test(df_recent$BUR_SCORE, df_recent$D_YEAR, p.adjust.method = "holm"))
+
+cat("\n--- GAD-7 Pairwise ---\n")
+print(pairwise.wilcox.test(df_recent$GAD_SCORE, df_recent$D_YEAR, p.adjust.method = "holm"))
+```
+
+
+
+```{r all year stats}
+
+df_all_years_analysis <- df_allYears %>% 
+  mutate(D_YEAR = as.factor(D_YEAR))
+
+k_phq_all <- kruskal.test(PHQ_SCORE ~ D_YEAR, data = df_all_years_analysis)
+lm_phq_all <- lm(PHQ_SCORE ~ D_YEAR, data = df_all_years_analysis)
+summary(lm_phq_all)
+
+k_bur_all <- kruskal.test(BUR_SCORE ~ D_YEAR, data = df_all_years_analysis)
+lm_bur_all <- lm(BUR_SCORE ~ D_YEAR, data = df_all_years_analysis)
+summary(lm_bur_all)
+
+k_gad_all <- kruskal.test(GAD_SCORE ~ D_YEAR, data = df_all_years_analysis)
+lm_gad_all <- lm(GAD_SCORE ~ D_YEAR, data = df_all_years_analysis)
+summary(lm_gad_all)
+
+
+# Kruskal-Wallis (All Years)
+raw_p_kw_all <- c(
+  PHQ = k_phq_all$p.value,
+  BUR = k_bur_all$p.value,
+  GAD = k_gad_all$p.value
+)
+adj_p_kw_all <- p.adjust(raw_p_kw_all, method = "holm")
+
+# Linear Model (ANOVA) (All Years)
+raw_p_lm_all <- c(
+  PHQ = get_lm_p(lm_phq_all),
+  BUR = get_lm_p(lm_bur_all),
+  GAD = get_lm_p(lm_gad_all)
+)
+adj_p_lm_all <- p.adjust(raw_p_lm_all, method = "holm")
+
+
+print("--- KRUSKAL-WALLIS RESULTS (All Years Combined, Holm Adjusted) ---")
+print(data.frame(
+  Outcome = names(raw_p_kw_all),
+  Raw_P = round(raw_p_kw_all, 5),
+  Adj_P = round(adj_p_kw_all, 5),
+  Signif = ifelse(adj_p_kw_all < 0.05, "*", "")
+))
+
+print("--- LINEAR MODEL RESULTS (All Years Combined, Holm Adjusted) ---")
+print(data.frame(
+  Outcome = names(raw_p_lm_all),
+  Raw_P = round(raw_p_lm_all, 5),
+  Adj_P = round(adj_p_lm_all, 5),
+  Signif = ifelse(adj_p_lm_all < 0.05, "*", "")
+))
+```
+
+```{r pairwise all years}
+cat("\n=================================================\n")
+cat("PAIRWISE COMPARISONS (All Years Combined)\n")
+cat("Test: Pairwise Wilcoxon Rank Sum (Holm-Adjusted)\n")
+cat("=================================================\n")
+
+cat("\n--- PHQ-9 Pairwise ---\n")
+print(pairwise.wilcox.test(df_all_years_analysis$PHQ_SCORE, df_all_years_analysis$D_YEAR, p.adjust.method = "holm"))
+
+cat("\n--- Burnout Pairwise ---\n")
+print(pairwise.wilcox.test(df_all_years_analysis$BUR_SCORE, df_all_years_analysis$D_YEAR, p.adjust.method = "holm"))
+
+cat("\n--- GAD-7 Pairwise ---\n")
+print(pairwise.wilcox.test(df_all_years_analysis$GAD_SCORE, df_all_years_analysis$D_YEAR, p.adjust.method = "holm"))
+```
+
+```{r all year plotting}
+
+
+
+# Combine all years but group by Grade Level (D_YEAR)
+df_grade_means <- df_allYears %>%
+  group_by(D_YEAR) %>%
+  summarise(
+    PHQ_mean = mean(PHQ_SCORE, na.rm = TRUE),
+    BUR_mean = mean(BUR_SCORE, na.rm = TRUE),
+    GAD_mean = mean(GAD_SCORE, na.rm = TRUE)
+  )
+
+
+p_phq_all <- ggplot(df_allYears, aes(x = D_YEAR, y = PHQ_SCORE, fill = D_YEAR)) +
+  geom_violin(alpha = 0.5, trim = FALSE, bw = 0.5) +
+  geom_boxplot(width = 0.1, color = "black", outlier.shape = NA) + 
+  geom_point(data = df_grade_means, aes(y = PHQ_mean), shape = 18, size = 4, color = "black") +
+  geom_line(data = df_grade_means, aes(y = PHQ_mean, group = 1), color = "black", linewidth = 1) +
+  theme_minimal() +
+  labs(x = "Grade Level", y = "PHQ-9 Score",
+       title = "PHQ-9 Scores by Grade Level (All Years Combined)", subtitle = "Higher scores indicate greater depression severity. Black Line = Mean Score per Grade") +
+  theme(legend.position = "none",
+        plot.subtitle = element_text(size = 10))
+
+
+p_burn_all <- ggplot(df_allYears, aes(x = D_YEAR, y = BUR_SCORE, fill = D_YEAR)) +
+  geom_violin(alpha = 0.5, trim = FALSE, bw = 0.5) +
+  geom_boxplot(width = 0.1, color = "black", outlier.shape = NA) + 
+  geom_point(data = df_grade_means, aes(y = BUR_mean), shape = 18, size = 4, color = "black") +
+  geom_line(data = df_grade_means, aes(y = BUR_mean, group = 1), color = "black", linewidth = 1) +
+  theme_minimal() +
+  labs(x = "Grade Level", y = "Burnout Score",
+       title = "Burnout Scores by Grade Level (All Years Combined)", subtitle = "Higher scores indicate greater burnout severity. Black Line = Mean Score per Grade") +
+  theme(legend.position = "none",
+        plot.subtitle = element_text(size = 10))
+
+
+p_gad_all <- ggplot(df_allYears, aes(x = D_YEAR, y = GAD_SCORE, fill = D_YEAR)) +
+  geom_violin(alpha = 0.5, trim = FALSE, bw = 0.5) +
+  geom_boxplot(width = 0.1, color = "black", outlier.shape = NA) + 
+  geom_point(data = df_grade_means, aes(y = GAD_mean), shape = 18, size = 4, color = "black") +
+  geom_line(data = df_grade_means, aes(y = GAD_mean, group = 1), color = "black", linewidth = 1) +
+  theme_minimal() +
+  labs(x = "Grade Level", y = "GAD-7 Score",
+       title = "GAD-7 Scores by Grade Level (All Years Combined)", subtitle = "Higher scores indicate greater anxiety severity. Black Line = Mean Score per Grade") +
+  theme(legend.position = "none",
+        plot.subtitle = element_text(size = 10))
+
+
+print(p_phq_all)
+print(p_burn_all)
+print(p_gad_all)
+
+
+ggsave("PHQ_GradeLevel_AllYears.png", plot = p_phq_all, width = 6, height = 6, units = "in", dpi = 300, bg = "white")
+ggsave("Burnout_GradeLevel_AllYears.png", plot = p_burn_all, width = 6, height = 6, units = "in", dpi = 300, bg = "white")
+ggsave("GAD_GradeLevel_AllYears.png", plot = p_gad_all, width = 6, height = 6, units = "in", dpi = 300, bg = "white")
+
+```
+
+
+```{r most recent plotting}
+
+
+
+df_recent <- df_allYears %>% 
+  filter(Year == "2025-2026") %>%
+  mutate(D_YEAR = factor(D_YEAR)) 
+
+
+df_recent_means <- df_recent %>%
+  group_by(D_YEAR) %>%
+  summarise(
+    PHQ_mean = mean(PHQ_SCORE, na.rm = TRUE),
+    BUR_mean = mean(BUR_SCORE, na.rm = TRUE),
+    GAD_mean = mean(GAD_SCORE, na.rm = TRUE)
+  )
+
+
+p_phq_recent <- ggplot(df_recent, aes(x = D_YEAR, y = PHQ_SCORE, fill = D_YEAR)) +
+  geom_violin(alpha = 0.5, trim = FALSE, bw = 0.5) +
+  geom_boxplot(width = 0.1, color = "black", outlier.shape = NA) + 
+  geom_point(data = df_recent_means, aes(y = PHQ_mean), shape = 18, size = 4, color = "black") +
+  geom_line(data = df_recent_means, aes(y = PHQ_mean, group = 1), color = "black", linewidth = 1) +
+  theme_minimal() +
+  labs(x = "Grade Level", y = "PHQ-9 Score",
+       title = "2025-2026 PHQ-9 by Grade Level", subtitle = "Higher scores indicate greater depression severity. Black Line = Mean Score per Class") +
+  theme(legend.position = "none",
+        plot.subtitle = element_text(size = 10))
+
+
+p_burn_recent <- ggplot(df_recent, aes(x = D_YEAR, y = BUR_SCORE, fill = D_YEAR)) +
+  geom_violin(alpha = 0.5, trim = FALSE, bw = 0.5) +
+  geom_boxplot(width = 0.1, color = "black", outlier.shape = NA) + 
+  geom_point(data = df_recent_means, aes(y = BUR_mean), shape = 18, size = 4, color = "black") +
+  geom_line(data = df_recent_means, aes(y = BUR_mean, group = 1), color = "black", linewidth = 1) +
+  theme_minimal() +
+  labs(x = "Grade Level", y = "Burnout Score",
+       title = "2025-2026 Burnout by Grade Level", subtitle = "Higher scores indicate greater burnout severity. Black Line = Mean Score per Class") +
+  theme(legend.position = "none",
+        plot.subtitle = element_text(size = 10))
+
+
+p_gad_recent <- ggplot(df_recent, aes(x = D_YEAR, y = GAD_SCORE, fill = D_YEAR)) +
+  geom_violin(alpha = 0.5, trim = FALSE, bw = 0.5) +
+  geom_boxplot(width = 0.1, color = "black", outlier.shape = NA) + 
+  geom_point(data = df_recent_means, aes(y = GAD_mean), shape = 18, size = 4, color = "black") +
+  geom_line(data = df_recent_means, aes(y = GAD_mean, group = 1), color = "black", linewidth = 1) +
+  theme_minimal() +
+  labs(x = "Grade Level", y = "GAD-7 Score",
+       title = "2025-2026 GAD-7 by Grade Level", subtitle = "Higher scores indicate greater anxiety severity. Black Line = Mean Score per Class") +
+  theme(legend.position = "none",
+        plot.subtitle = element_text(size = 10))
+
+
+print(p_phq_recent)
+print(p_burn_recent)
+print(p_gad_recent)
+
+
+ggsave("PHQ_Recent_Square.png", plot = p_phq_recent, width = 6, height = 6, units = "in", dpi = 300, bg = "white")
+ggsave("Burnout_Recent_Square.png", plot = p_burn_recent, width = 6, height = 6, units = "in", dpi = 300, bg = "white")
+ggsave("GAD_Recent_Square.png", plot = p_gad_recent, width = 6, height = 6, units = "in", dpi = 300, bg = "white")
+
+```
 
 
 ## SUMMARY (IMPORTANT)
@@ -499,3 +779,53 @@ GAD Coefficients:
 (Intercept)     4.8000     0.9205   5.215 1.99e-06 ***
 Year_Num       13.3124     2.4170   5.508 6.43e-07 *** SIGNIF
 I(Year_Num^2)  -6.6776     1.1768  -5.674 3.36e-07 *** SIGNIF
+
+```{r first vs last}
+
+cat("\n=================================================\n")
+cat("FIRST vs LAST YEAR COMPARISON \n")
+cat("=================================================\n")
+
+df_first_last <- df_model %>%
+  filter(Year_Num %in% c(0, 2))
+
+cohorts <- unique(df_first_last$Cohort)
+
+for (c in c("Class of 2026","Class of 2027")) {
+  cat("\n----------------------------------\n")
+  cat("ANALYSIS FOR:", c, "\n")
+  sub_data <- df_first_last %>% filter(Cohort == c)
+  
+  if (nrow(sub_data) > 0 && length(unique(sub_data$Year_Num)) > 1) {
+    print("--PHQ (First vs Last)--")
+    print(summary(lm(PHQ_SCORE ~ Year_Num, data = sub_data)))
+    
+    print("--BUR (First vs Last)--")
+    print(summary(lm(BUR_SCORE ~ Year_Num, data = sub_data)))
+    
+    print("--GAD (First vs Last)--")
+    print(summary(lm(GAD_SCORE ~ Year_Num, data = sub_data)))
+  } else {
+    cat("Insufficient data for this cohort (needs both Year 0 and Year 2).\n")
+  }
+}
+
+for (c in c("Class of 2026","Class of 2027")) {
+  cat("\n----------------------------------\n")
+  cat("ANALYSIS FOR:", c, "\n")
+  sub_data <- df_first_last %>% filter(Cohort == c)
+  
+  if (nrow(sub_data) > 0 && length(unique(sub_data$Year_Num)) > 1) {
+    print("--PHQ (First vs Last)--")
+    print(summary(lm(PHQ_SCORE ~ Year_Num + D_YEAR, data = sub_data)))
+    
+    print("--BUR (First vs Last)--")
+    print(summary(lm(BUR_SCORE ~ Year_Num + D_YEAR, data = sub_data)))
+    
+    print("--GAD (First vs Last)--")
+    print(summary(lm(GAD_SCORE ~ Year_Num + D_YEAR, data = sub_data)))
+  } else {
+    cat("Insufficient data for this cohort (needs both Year 0 and Year 2).\n")
+  }
+}
+```
